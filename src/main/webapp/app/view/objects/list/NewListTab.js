@@ -53,7 +53,20 @@ Ext.define('GeCo.view.objects.list.NewListTab',{
 		flex: 1,
 		margin: '0 3 0 0',
 		xtype: 'NewListEast'
-
+	},{
+		width: 350,
+		layout: 'fit',
+		items: [{
+			layout: {
+				type: 'vbox',
+				align: 'stretch'
+			},
+			items: [{
+				xtype: 'WidgetProperties',
+				margin: '3 0 0 0',
+				height: '50%'
+			}]
+		}]
 	}]
 
 });

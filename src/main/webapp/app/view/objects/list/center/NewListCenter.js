@@ -7,10 +7,14 @@ Ext.define('GeCo.view.objects.list.center.NewListCenter',{
 	title: 'Vista previa listado',
 	layout: 'fit',
 	reference: 'sourceGrid',
+	
+	listeners: {
+		afterrender: 'doSetSpecialEvents'
+	},
 
 	dockedItems: [{
-        xtype: 'toolbar',
-        dock: 'bottom',
-        items: []
-    }]
+		xtype: 'toolbar',
+		dock: 'bottom',
+		items: []
+	}]
 });
