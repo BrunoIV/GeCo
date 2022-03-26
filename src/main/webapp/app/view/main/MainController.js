@@ -15,5 +15,9 @@ Ext.define('GeCo.view.main.MainController', {
         if (choice === 'yes') {
             //
         }
-    }
+    },
+    
+    doOpenTab: function() {
+		GeCo.Util.goTab('NewListTab');
+	}
 });
