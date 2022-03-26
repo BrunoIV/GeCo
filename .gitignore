@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Sencha ###
+bootstrap.css
+bootstrap.js
+bootstrap.json
+bootstrap.jsonp
+build/
+ext/
