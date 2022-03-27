@@ -9,7 +9,8 @@ Ext.define('GeCo.view.main.Main', {
         'GeCo.Util'
     ],
 
-    controller: 'main',
+    controller: 'Main',
+    viewModel: 'Main',
 	
 	layout: {
 		type: 'vbox',

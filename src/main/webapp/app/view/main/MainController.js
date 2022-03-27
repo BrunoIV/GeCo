@@ -1,6 +1,6 @@
 Ext.define('GeCo.view.main.MainController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.main',
+    alias: 'controller.Main',
 
     doOpenTab: function() {
 		GeCo.Util.goTab('NewListTab');
