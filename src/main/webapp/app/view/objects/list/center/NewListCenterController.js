@@ -22,6 +22,20 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 			//Muestro en la vista WidgetProperties todas las propiedades que se pueden editar del listado
 			_this.getViewModel().get('widget_properties').filterPropertiesObject('list', _this.getConfig());
 		});
+		
+		
+		//Menú contextual al hacer click derecho sobre el panel del grid
+		panel.getEl().on('contextmenu', function(e) {
+			e.preventDefault();
+
+			var cntMenu = Ext.widget('NewListCenteContextMenu');
+			cntMenu.tree = panel;
+			cntMenu.on('hide', function(menu) {menu.destroy()}, this, {delay: 100});
+
+			var position = e.getXY();
+			e.stopEvent();
+			cntMenu.showAt(position);
+		});
 	},
 	
 	getConfig: function() {
@@ -32,6 +46,22 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		config['iconCls'] = panel.iconCls;
 		config['currentComponent'] = panel.id;
 		return config;	
-	}
+	},
+	
+	/**
+	 * Muestra el diálogo que permite agregar botones
+	 * @see NewListCenterContextMenu
+	 */
+	doAddButtonDialog: function() {
+		
+	},
+	
+	/**
+	 * Muestra el dialogo que permite agregar columnas
+	 * @see NewListCenterContextMenu
+	 */
+	doAddColumnDialog: function() {
+		
+	},
 	
 });
