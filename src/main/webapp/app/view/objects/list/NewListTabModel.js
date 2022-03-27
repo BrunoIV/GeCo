@@ -7,6 +7,13 @@ Ext.define('GeCo.view.objects.list.NewListTabModel', {
 			xtype: 'gridcolumn',
 			dataIndex: 'id',
 			text: 'Id'
+		},{
+			xtype: 'gridcolumn',
+			text: '+',
+			menuDisabled: true,
+			align: 'center',
+			width: 30,
+			addNewTab: true
 		}]
 	}
 
