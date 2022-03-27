@@ -6,6 +6,23 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		this.getViewModel().set('newlist_center', this);
 	},
 	
+	addEditTab: function(header, column, e, t,eOpts){
+		
+		//El botón de agregar tiene un flag. Se crea por defecto en NewListTabModel
+		if(column.addNewTab === true) {
+			var fields = this.getViewModel().get('default_list_center_columns');
+
+			fields.splice(fields.length - 1, 0, {
+				xtype: 'gridcolumn',
+				text: 'New tab'
+			});
+			
+			//Fuerzo que se actualice el valor
+			this.getViewModel().set('default_list_center_columns', []);
+			this.getViewModel().set('default_list_center_columns', fields);
+		}
+	},
+	
 	doSetSpecialEvents: function() {
 		var panel = this.getView();
 		var _this = this;
@@ -36,6 +53,7 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 			e.stopEvent();
 			cntMenu.showAt(position);
 		});
+	
 	},
 	
 	getConfig: function() {

@@ -9,12 +9,17 @@ Ext.define('GeCo.view.objects.list.center.NewListCenter',{
 	reference: 'sourceGrid',
 	
 	listeners: {
-		afterrender: 'doSetSpecialEvents'
+		afterrender: 'doSetSpecialEvents',
+		headerclick: 'addEditTab'
 	},
 
 	dockedItems: [{
 		xtype: 'toolbar',
 		dock: 'bottom',
 		items: []
-	}]
+	}],
+	
+ 	bind: {
+		columns: '{default_list_center_columns}'
+	}
 });
