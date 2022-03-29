@@ -3,9 +3,19 @@ Ext.define('GeCo.view.objects.list.NewListTabModel', {
     alias: 'viewmodel.NewListTab',
     
 	data: {
+	
 		NewListCenter: {
 			iconCls: 'fa fa-table',
 			title: 'Vista previa listado',
+			
+			buttons:[{
+				tooltip: 'Agregar botón',
+				iconCls: 'fa fa-plus',
+				addNewButton: true,
+				listeners: {
+					click: 'doAddButtonToolbar'
+				}
+			}],
 			
 			columns: [{
 				xtype: 'gridcolumn',
@@ -16,6 +26,7 @@ Ext.define('GeCo.view.objects.list.NewListTabModel', {
 				xtype: 'gridcolumn',
 				text: '+',
 				menuDisabled: true,
+				tooltip: 'Agregar pestaña',
 				align: 'center',
 				width: 30,
 				addNewTab: true

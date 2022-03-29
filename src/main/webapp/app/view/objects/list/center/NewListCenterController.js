@@ -26,7 +26,41 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		}
 	},
 	
-	doSetSpecialEvents: function() {
+	/**
+	 * Obtiene del VM los botones y los muestra en el toolbar
+	 */
+	doLoadToolbarButtons: function() {
+		var toolbar = this.getView().down('toolbar');
+		
+		//Borro todos los items existentes
+		var items = toolbar.items;
+		items.each(function(item,index,length){
+			toolbar.remove(item);
+		});
+		
+		
+		var buttons = this.getViewModel().get('NewListCenter.buttons');
+		
+		//Los inserto uno a uno para poder agregar la posición del botón
+		for (var i = 0; i < buttons.length; i++) {
+			var button = buttons[i];
+			button.buttonIndex = i;
+			this.getView().down('toolbar').add(button);
+		}
+
+	},
+	
+	doAddButtonToolbar: function() {
+		this.getViewModel().get('NewListCenter.buttons').push({
+			text: 'New Button',
+			listeners: {
+				click: 'doEditButton'
+			}
+		});
+		this.doLoadToolbarButtons();
+	},
+	
+	doSetSpecialEvents: function() {		
 		var panel = this.getView();
 		var _this = this;
 		
@@ -65,8 +99,8 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		
 		config['title'] = panel.title;
 		config['iconCls'] = panel.iconCls;
-		config['component_name_viewmodel'] = 'NewListCenter';
-		config['component_type'] = 'list';
+		config['_component_name_viewmodel'] = 'NewListCenter';
+		config['_component_type'] = 'list';
 		return config;	
 	},
 	
@@ -79,10 +113,29 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		config['dataIndex'] = column.dataIndex;
 		config['width'] = column.width;
 		config['locked'] = column.locked;
-		config['fullColumnIndex'] = column.fullColumnIndex;
-		config['component_name_viewmodel'] = 'NewListCenter';
-		config['component_type'] = 'tab';
+		config['_itemIndex'] = column.fullColumnIndex;
+		config['_component_name_viewmodel'] = 'NewListCenter';
+		config['_component_type'] = 'columns';
 		return config;	
+	},
+	
+	getConfigButton: function(button) {
+		var config = [];
+		var _this = this;
+		
+		config['text'] = button.text;
+		config['iconCls'] = button.iconCls;
+		config['_itemIndex'] = button.buttonIndex;
+		config['_component_name_viewmodel'] = 'NewListCenter';
+		config['_component_type'] = 'buttons';
+		config['_callback'] = function() {
+			_this.doLoadToolbarButtons();
+		};
+		return config;
+	},
+	
+	doEditButton: function(cmp) {
+		this.getViewModel().get('widget_properties').filterPropertiesObject(this.getConfigButton(cmp));
 	},
 	
 	/**

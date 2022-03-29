@@ -12,24 +12,30 @@ Ext.define('GeCo.view.objects.common.widgetproperties.WidgetPropertiesController
 	 */
 	updatePropertyActiveWidget: function (editor, e, eOpts) {
 		
-		//Contiene todas las propiedades del elemento que estás editando (título, icono, eventos, etc)
-		var store = this.getView().getStore().getData();
-		
+		//Contiene TODAS las propiedades del elemento que estás editando, hasta las que están filtradas
+		var store = this.getView().getStore().getData().getSource(); //getSource para que muestre sin filtrar
+	
 		//Contiene la propiedad concreta que has editado en el grid
 		var modifiedProperty = e.record.data; 
 	
-		//Las pestañas se almacenan como un array
-		if(store.get('component_type').get('value') === 'tab') {
-			var idInViewModel = store.get('component_name_viewmodel').get('value') + '.columns';
-			var columns = this.getViewModel().get(idInViewModel);
-
-			var tabIndex = store.get('fullColumnIndex').get('value');
-			columns[tabIndex][modifiedProperty.id] = modifiedProperty.value;
+		var componentType = store.get('_component_type').get('value');
+		if(['columns', 'buttons'].includes(componentType)) {
+			//Las pestañas se almacenan como un array
+			var idInViewModel = store.get('_component_name_viewmodel').get('value') + '.' + componentType;
+			var items = this.getViewModel().get(idInViewModel);
+			
+			var itemIndex = store.get('_itemIndex').get('value');
+			items[itemIndex][modifiedProperty.id] = modifiedProperty.value;
 			
 			this.getViewModel().set(idInViewModel, []);
-			this.getViewModel().set(idInViewModel, columns);
+			this.getViewModel().set(idInViewModel, items);
+			
+			if(store.get('_callback') != null) {
+				var fn = store.get('_callback').get('value');
+				fn();
+			}
 		} else {
-			var idInViewModel = store.get('component_name_viewmodel').get('value') + '.' + modifiedProperty.id;
+			var idInViewModel = store.get('_component_name_viewmodel').get('value') + '.' + modifiedProperty.id;
 			this.getViewModel().set(idInViewModel, modifiedProperty.value);
 		}
 
@@ -45,24 +51,28 @@ Ext.define('GeCo.view.objects.common.widgetproperties.WidgetPropertiesController
 		//Hay que limpiar filtros porque el widget anterior es posible que no tenga los atributos del actual
 		store.clearFilter();
 		
-		store.each(function(record,idx){
-			var id = record.get('id');
-			
-			//Recorre el array asociativo
-			for (var param in params) {
-			
-				//Si encuentra algo que coincida en PropertiesWidgets lo reemplaza
-				if(id == param) {
-					record.set('value', params[param]);
-				}
+		//Recorre el array asociativo
+		for (var param in params) {
+			if(param.startsWith('_')) {
+				store.add({ id: param, value: params[param] });
+			} else {
+				store.each(function(record,idx){
+					
+					//Si encuentra algo que coincida en PropertiesWidgets lo reemplaza
+					if(record.get('id') == param) {
+						record.set('value', params[param]);
+					}
+				
+				    record.commit(); 
+				});
 			}
-
-		    record.commit(); 
-		});
+				
+		}
+		
 		
 		//Muestro las configuraciones dependiendo del tipo de objeto (lista, botón, etc)
 		store.filterBy(function(record, id) {
-			return record.get('objects').indexOf(params['component_type']) !== -1;
+			return record.get('objects') != null && record.get('objects').indexOf(params['_component_type']) !== -1;
 		});
 	}
 
