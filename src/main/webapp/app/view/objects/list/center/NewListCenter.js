@@ -3,8 +3,8 @@ Ext.define('GeCo.view.objects.list.center.NewListCenter',{
 	xtype: 'NewListCenter',
 	controller: 'NewListCenter',
 
-	iconCls: 'fa fa-table',
-	title: 'Vista previa listado',
+	title: ' ',  //necesito tener un título por defecto porque tiene un evento. No sirve vacio
+	
 	layout: 'fit',
 	reference: 'sourceGrid',
 	
@@ -20,6 +20,8 @@ Ext.define('GeCo.view.objects.list.center.NewListCenter',{
 	}],
 	
  	bind: {
-		columns: '{default_list_center_columns}'
+		columns: '{NewListCenter.columns}',
+		title: '{NewListCenter.title}',
+		iconCls: '{NewListCenter.iconCls}'
 	}
 });

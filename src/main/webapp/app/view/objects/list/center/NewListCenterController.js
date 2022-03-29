@@ -10,16 +10,19 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		
 		//El botón de agregar tiene un flag. Se crea por defecto en NewListTabModel
 		if(column.addNewTab === true) {
-			var fields = this.getViewModel().get('default_list_center_columns');
+			var fields = this.getViewModel().get('NewListCenter.columns');
 
+			//Agrega en la penúltima posición para que el último siempre sea el botón de agregar
 			fields.splice(fields.length - 1, 0, {
 				xtype: 'gridcolumn',
 				text: 'New tab'
 			});
 			
 			//Fuerzo que se actualice el valor
-			this.getViewModel().set('default_list_center_columns', []);
-			this.getViewModel().set('default_list_center_columns', fields);
+			this.getViewModel().set('NewListCenter.columns', []);
+			this.getViewModel().set('NewListCenter.columns', fields);
+		} else {
+			this.getViewModel().get('widget_properties').filterPropertiesObject(this.getConfigColumn(column));
 		}
 	},
 	
@@ -37,7 +40,7 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 			panel.getEl().dom.style.border = '1px solid #ff0000';
 			
 			//Muestro en la vista WidgetProperties todas las propiedades que se pueden editar del listado
-			_this.getViewModel().get('widget_properties').filterPropertiesObject('list', _this.getConfig());
+			_this.getViewModel().get('widget_properties').filterPropertiesObject(_this.getConfigGrid());
 		});
 		
 		
@@ -56,13 +59,29 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 	
 	},
 	
-	getConfig: function() {
+	getConfigGrid: function() {
 		var panel = this.getView();
 		var config = [];
 		
 		config['title'] = panel.title;
 		config['iconCls'] = panel.iconCls;
-		config['currentComponent'] = panel.id;
+		config['component_name_viewmodel'] = 'NewListCenter';
+		config['component_type'] = 'list';
+		return config;	
+	},
+	
+	getConfigColumn: function(column) {
+		var config = [];
+		
+		config['flex'] = column.flex;
+		config['text'] = column.text;
+		config['tooltip'] = column.tooltip;
+		config['dataIndex'] = column.dataIndex;
+		config['width'] = column.width;
+		config['locked'] = column.locked;
+		config['fullColumnIndex'] = column.fullColumnIndex;
+		config['component_name_viewmodel'] = 'NewListCenter';
+		config['component_type'] = 'tab';
 		return config;	
 	},
 	
