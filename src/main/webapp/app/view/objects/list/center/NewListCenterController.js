@@ -6,21 +6,55 @@ Ext.define('GeCo.view.objects.list.center.NewListCenterController', {
 		this.getViewModel().set('newlist_center', this);
 	},
 	
-	addEditTab: function(header, column, e, t,eOpts){
+	/**
+	 * Fuerza la actualización de las columnas en el ViewModel
+	 */
+	updateColumnsOfGrid: function(columns) {
+		this.getViewModel().set('NewListCenter.columns', []);
+		this.getViewModel().set('NewListCenter.columns', columns);
+	},
+	
+	/**
+	 * Tras reordenar las columnas, aplica los cambios en el ViewModel para que
+	 * al refrescar no se pierdan.
+	 */
+	reorderColumnsViewModel: function(cmp, column, fromIndex, toIndex) {
+		var columns = this.getViewModel().get('NewListCenter.columns');
+		
+		//No puedes poner ninguna columna a continuación del +
+		if(columns.length === toIndex) {
+			this.updateColumnsOfGrid(columns);
+			return;
+		}
+
+		//Si mueves de izquierda a derecha tiene en cuenta el que estás arrastrando
+		if(fromIndex < toIndex) {
+			toIndex--;
+		}
+		
+		var col = columns.splice(fromIndex, 1);
+		columns.splice(toIndex, 0, col[0]);
+		this.updateColumnsOfGrid(columns);
+	},
+	
+	/**
+	 * Al sobre una columna del grid se abre la edición
+	 * Excepto la última que es un falso botón que agrega una nueva columna
+	 */
+	addEditColumn: function(header, column, e, t,eOpts){
 		
 		//El botón de agregar tiene un flag. Se crea por defecto en NewListTabModel
 		if(column.addNewTab === true) {
-			var fields = this.getViewModel().get('NewListCenter.columns');
+			var columns = this.getViewModel().get('NewListCenter.columns');
 
 			//Agrega en la penúltima posición para que el último siempre sea el botón de agregar
-			fields.splice(fields.length - 1, 0, {
+			columns.splice(columns.length - 1, 0, {
 				xtype: 'gridcolumn',
 				text: 'New tab'
 			});
 			
 			//Fuerzo que se actualice el valor
-			this.getViewModel().set('NewListCenter.columns', []);
-			this.getViewModel().set('NewListCenter.columns', fields);
+			this.updateColumnsOfGrid(columns);
 		} else {
 			this.getViewModel().get('widget_properties').filterPropertiesObject(this.getConfigColumn(column));
 		}

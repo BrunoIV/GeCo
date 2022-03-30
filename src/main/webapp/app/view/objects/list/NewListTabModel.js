@@ -28,6 +28,7 @@ Ext.define('GeCo.view.objects.list.NewListTabModel', {
 				menuDisabled: true,
 				tooltip: 'Agregar pestaña',
 				align: 'center',
+				draggable: false,
 				width: 30,
 				addNewTab: true
 			}]

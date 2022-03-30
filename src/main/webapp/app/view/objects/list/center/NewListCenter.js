@@ -11,7 +11,8 @@ Ext.define('GeCo.view.objects.list.center.NewListCenter',{
 	listeners: {
 		afterrender: 'doSetSpecialEvents',
 		beforerender: 'doLoadToolbarButtons',
-		headerclick: 'addEditTab'
+		headerclick: 'addEditColumn',
+		columnmove: 'reorderColumnsViewModel'
 	},
 
 	dockedItems: [{
